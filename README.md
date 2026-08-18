@@ -12,16 +12,17 @@ Temporarily ignore the existing startup configuration → boot into IOS → eras
 Connect the switch to your computer using a Cisco console cable. In my case it was RJ-45 to USB console cable.
 After connecting the console cable, Windows assigns it a **COM** port. To find it, open: `Device Manager` → `Ports (COM & LPT)`
 
-Find the USB Serial device. In this case: ```USB Serial Port (COM4)```
+Find the USB Serial device. In this case: `USB Serial Port (COM4)`
 
-Open PuTTY and select:
+**Open PuTTY and select:**
 - Connection type: `Serial`
 - Serial line: `COM4`
 - Speed: `9600`
+
 Click **Open**.
 
 # 2. Enter Bootloader
-The Bootloader is a pre-boot program that initializes the switch hardware. It interrupts the normal IOS XE boot process and provides a low-level environment for accessing the flash filesystem and recovering or configuring the switch before the OS loads.
+The **Bootloader** is a pre-boot program that initializes the switch hardware. It interrupts the normal IOS XE boot process and provides a low-level environment for accessing the flash filesystem and recovering or configuring the switch before the OS loads.
 
 - Power off the switch.
 - Press and hold the MODE button.
@@ -33,7 +34,6 @@ The normal IOS XE boot process has been interrupted and the switch is now in the
 # 3. Initialize the Flash
 
 You should see a prompt similar to:
-
 ```bash
   flash_init
   boot
@@ -63,7 +63,7 @@ nvram_config
 vlan.dat
 pnp-tech-time
 ```
-## Important: Do not delete IOS XE system files such as:
+## Important! Do not delete IOS XE system files such as:
 ```bash
 cat3k_...
 packages.conf
@@ -71,7 +71,12 @@ dc_profile_dir
 ```
 ...and other files required by IOS XE. These are part of the switch operating system.
 
-`vlan.dat` and `config.text` are different: they contain user-specific configuration and are the files relevant to the reset process.
+Followed...
+```bash
+vlan.dat
+config.text
+```
+...are different: they contain user-specific configuration and are the files relevant to the reset process.
 
 # 4. Check Bootloader Variables
 
@@ -80,10 +85,7 @@ Run:
 set
 ```
 
-Look for:
-```bash
-SWITCH_IGNORE_STARTUP_CFG=0
-```
+Look for: `SWITCH_IGNORE_STARTUP_CFG=0`
 This variable determines whether the switch loads or ignores the existing startup configuration during boot. `0` means the startup configuration is loaded; `1` means it is ignored. When set to `1`, the switch will boot in a clean state without applying the existing configuration.
 
 Change it to `1`:
@@ -158,10 +160,8 @@ In the privileged mode (`enable`), check the startup configuration:
 ```bash
 show startup-config
 ```
-You should see something similar to:
-```bash
-startup-config is not present
-```
+You should see something similar to: `startup-config is not present`
+
 Then check the VLANs:
 ```bash
 show vlan brief
@@ -191,7 +191,7 @@ The IOS XE system files such as:
 cat3k_...
 packages.conf
 ```
-should remain.
+...should remain.
 
 # 10. Restore the Bootloader Variable
 
@@ -201,9 +201,7 @@ set
 ```
 
 You should still see:
-```bash
-SWITCH_IGNORE_STARTUP_CFG=1
-```
+  ```SWITCH_IGNORE_STARTUP_CFG=1```
 
 Now return it to the normal value:
 
@@ -216,7 +214,8 @@ Verify:
 set
 ```
 
-It should now show: ```SWITCH_IGNORE_STARTUP_CFG=0```
+It should now show:
+  ```SWITCH_IGNORE_STARTUP_CFG=0```
 
 # 11. Boot Normally
 
@@ -229,14 +228,10 @@ or explicitly:
 boot flash:packages.conf
 ```
 
-# 12. Skip the Initial Configuration Dialog
+# 12. Skip or accept the Initial Configuration Dialog
 
-After boot, the switch may ask: `Would you like to enter the initial configuration dialog? [yes/no]:`
-
-Enter:
-```bash
-no
-```
+After boot, the switch may ask:
+```Would you like to enter the initial configuration dialog? [yes/no]:```
 
 # 13. Quick Summary
 
