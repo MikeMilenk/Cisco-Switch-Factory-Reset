@@ -10,14 +10,21 @@ Temporarily ignore the existing startup configuration → boot into IOS → eras
 # 1. Establish a Console Connection
 
 Connect the switch to your computer using a Cisco console cable. In my case it was RJ-45 to USB console cable.
+![Console cable](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/6f408e151e9a48fe12604e9bf8f1c98c9f8885b5/images/Console%20port.heic)
+
 After connecting the console cable, Windows assigns it a **COM** port. To find it, open: `Device Manager` → `Ports (COM & LPT)`
 
 Find the USB Serial device. In this case: `USB Serial Port (COM4)`
+
+![Windows Device Manager](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/6f408e151e9a48fe12604e9bf8f1c98c9f8885b5/images/Device%20mgr%20Port.heic)
+
 
 **Open PuTTY and select:**
 - Connection type: `Serial`
 - Serial line: `COM4`
 - Speed: `9600`
+
+![PuTTY config](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/6f408e151e9a48fe12604e9bf8f1c98c9f8885b5/images/PuTTY%20Config.PNG)
 
 Click **Open**.
 
@@ -26,7 +33,9 @@ The **Bootloader** is a pre-boot program that initializes the switch hardware. I
 
 - Power off the switch.
 - Press and hold the MODE button.
+  ![Mode Button](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/6f408e151e9a48fe12604e9bf8f1c98c9f8885b5/images/Mode%20Button.heic)
 - Power on the switch. Keep holding MODE until the `SYS` and `ACTV` LEDs are both amber.
+  ![Amber Lights](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/6f408e151e9a48fe12604e9bf8f1c98c9f8885b5/images/Amber%20Lights.JPG)
 - Release the **MODE** button.
 
 The normal IOS XE boot process has been interrupted and the switch is now in the Bootloader.
