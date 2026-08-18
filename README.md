@@ -8,18 +8,18 @@ Temporarily ignore the existing startup configuration → boot into IOS → eras
 
 ---
 ## Table of Contents:
-**- [1. Establish a Console Connection](#1-establish-a-console-connection)**
-**- [2. Enter Bootloader](#2-enter-bootloader)**
-**- [3. Initialize the Flash](#3-initialize-the-flash)**
-**- [4. Check Bootloader Variables](#4-check-bootloader-variables)**
-**- [5. Boot the Switch](#5-boot-the-switch)**
-**- [6. Delete the Startup Configuration](#6-delete-the-startup-configuration)**
-**- [7. Delete the VLAN Database](#7-delete-the-vlan-database)**
-**- [8. Verify the Reset](#8-verify-the-reset)**
-**- [9. Enter Bootloader Again](#9-enter-bootloader-again)**
-**- [10. Restore the Bootloader Variable](#10-restore-the-bootloader-variable)**
-**- [11. Boot Normally](#11-boot-normally)**
-**- [12. Quick Summary](#12-quick-summary)**
+- **[1. Establish a Console Connection](#1-establish-a-console-connection)**
+- **[2. Enter Bootloader](#2-enter-bootloader)**
+- **[3. Initialize the Flash](#3-initialize-the-flash)**
+- **[4. Check Bootloader Variables](#4-check-bootloader-variables)**
+- **[5. Boot the Switch](#5-boot-the-switch)**
+- **[6. Delete the Startup Configuration](#6-delete-the-startup-configuration)**
+- **[7. Delete the VLAN Database](#7-delete-the-vlan-database)**
+- **[8. Verify the Reset](#8-verify-the-reset)**
+- **[9. Enter Bootloader Again](#9-enter-bootloader-again)**
+- **[10. Restore the Bootloader Variable](#10-restore-the-bootloader-variable)**
+- **[11. Boot Normally](#11-boot-normally)**
+- **[12. Quick Summary](#12-quick-summary)**
 ---
 
 
