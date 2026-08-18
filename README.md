@@ -6,6 +6,22 @@ Temporarily ignore the existing startup configuration → boot into IOS → eras
 
 ## WARNING: This process deletes the switch configuration and VLAN database. Do not use it on a production switch unless the configuration was backed up or no longer required.
 
+---
+## Table of Contents:
+**- [1. Establish a Console Connection](#1-establish-a-console-connection)**
+**- [2. Enter Bootloader](#2-enter-bootloader)**
+**- [3. Initialize the Flash](#3-initialize-the-flash)**
+**- [4. Check Bootloader Variables](#4-check-bootloader-variables)**
+**- [5. Boot the Switch](#5-boot-the-switch)**
+**- [6. Delete the Startup Configuration](#6-delete-the-startup-configuration)**
+**- [7. Delete the VLAN Database](#7-delete-the-vlan-database)**
+**- [8. Verify the Reset](#8-verify-the-reset)**
+**- [9. Enter Bootloader Again](#9-enter-bootloader-again)**
+**- [10. Restore the Bootloader Variable](#10-restore-the-bootloader-variable)**
+**- [11. Boot Normally](#11-boot-normally)**
+**- [12. Quick Summary](#12-quick-summary)**
+---
+
 
 # 1. Establish a Console Connection
 
@@ -180,7 +196,7 @@ Commands are highlighted in **red**, while the **yellow** highlights show the co
 I also performed a `reload` at this stage, but it is **not required**. I simply chose to reload the switch before continuing..
 
 
-## 8. Verify the Reset
+# 8. Verify the Reset
 In the privileged mode (`enable`), check the startup configuration:
 ```bash
 show startup-config
