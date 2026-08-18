@@ -10,13 +10,13 @@ Temporarily ignore the existing startup configuration → boot into IOS → eras
 # 1. Establish a Console Connection
 
 Connect the switch to your computer using a Cisco console cable. In my case it was RJ-45 to USB console cable.
-![Console cable](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/6f408e151e9a48fe12604e9bf8f1c98c9f8885b5/images/Console%20port.heic)
+![Console cable](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/48814c9af7669ce19c18a4b4d2d474d37e6d60f6/images/Console%20port.jpg)
 
 After connecting the console cable, Windows assigns it a **COM** port. To find it, open: `Device Manager` → `Ports (COM & LPT)`
 
 Find the USB Serial device. In this case: `USB Serial Port (COM4)`
 
-![Windows Device Manager](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/6f408e151e9a48fe12604e9bf8f1c98c9f8885b5/images/Device%20mgr%20Port.heic)
+![Windows Device Manager](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/48814c9af7669ce19c18a4b4d2d474d37e6d60f6/images/Device%20mgr%20Port.jpg)
 
 
 **Open PuTTY and select:**
@@ -33,7 +33,7 @@ The **Bootloader** is a pre-boot program that initializes the switch hardware. I
 
 - Power off the switch.
 - Press and hold the MODE button.
-  ![Mode Button](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/6f408e151e9a48fe12604e9bf8f1c98c9f8885b5/images/Mode%20Button.heic)
+  ![Mode Button](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/48814c9af7669ce19c18a4b4d2d474d37e6d60f6/images/Mode%20Button.jpg)
 - Power on the switch. Keep holding MODE until the `SYS` and `ACTV` LEDs are both amber.
   ![Amber Lights](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/6f408e151e9a48fe12604e9bf8f1c98c9f8885b5/images/Amber%20Lights.JPG)
 - Release the **MODE** button.
@@ -49,6 +49,7 @@ You should see a prompt similar to:
 
 switch:
 ```
+![Bootloader initial prompt](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/48814c9af7669ce19c18a4b4d2d474d37e6d60f6/images/Flash%20init.PNG)
 
 Run:
 ```bash
@@ -65,7 +66,7 @@ dir flash:
 
 You may see files such as:
 ```bash
-cat3k_...
+cat3k_caa-...
 packages.conf
 config.text
 nvram_config
@@ -87,6 +88,8 @@ config.text
 ```
 ...are different: they contain user-specific configuration and are the files relevant to the reset process.
 
+![Flash directories](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/48814c9af7669ce19c18a4b4d2d474d37e6d60f6/images/Dir%20flash%20initial.PNG)
+
 # 4. Check Bootloader Variables
 
 Run:
@@ -96,6 +99,8 @@ set
 
 Look for: `SWITCH_IGNORE_STARTUP_CFG=0`
 This variable determines whether the switch loads or ignores the existing startup configuration during boot. `0` means the startup configuration is loaded; `1` means it is ignored. When set to `1`, the switch will boot in a clean state without applying the existing configuration.
+
+![SIS_CFG=0](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/48814c9af7669ce19c18a4b4d2d474d37e6d60f6/images/CFG0.PNG)
 
 Change it to `1`:
 
@@ -111,6 +116,8 @@ set
 
 You should now see: `SWITCH_IGNORE_STARTUP_CFG=1`
 
+![SIS_CFG=1](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/48814c9af7669ce19c18a4b4d2d474d37e6d60f6/images/CFG1%20-%201.PNG)
+
 In simple terms:
 
 - `0` = use the existing startup configuration
@@ -125,12 +132,12 @@ Run:
 boot flash:packages.conf
 ```
 
-If the boot variable points to `flash:packages.conf`, you can simply run:
-```bash
-boot
-```
-The switch should now boot IOS XE without applying the old startup configuration.
+The switch should now boot IOS XE without applying the old startup configuration. However, it may prompt you to enter the initial configuration dialog.
+At this stage, we skip the initial configuration:
+```Would you like to enter the initial configuration dialog?``` → ```No```
+```Would you like to terminate auto install?``` → ```Yes```
 
+![Skipping config dialog](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/Startup%20config%20prompt.PNG)
 
 # 6. Delete the Startup Configuration
 
@@ -145,6 +152,8 @@ show startup-config
 ```
 
 The configuration should still exist because ```SWITCH_IGNORE_STARTUP_CFG=1``` only caused the switch to ignore it during boot.
+
+![Original Startup config](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/Old%20Startup%20config.PNG)
 
 Now erase it:
 ```bash
@@ -164,6 +173,13 @@ Confirm the deletion when prompted.
 
 This removes the **VLAN database**, while `erase startup-config` removes the saved **switch configuration**.
 
+![Config and vlan erasing](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/erase%20config%20and%20vlan.jpg)
+
+Commands are highlighted in **red**, while the **yellow** highlights show the confirmation prompts. Select **OK** to confirm the deletion.
+
+I also performed a `reload` at this stage, but it is **not required**. I simply chose to reload the switch before continuing..
+
+
 ## 8. Verify the Reset
 In the privileged mode (`enable`), check the startup configuration:
 ```bash
@@ -175,7 +191,9 @@ Then check the VLANs:
 ```bash
 show vlan brief
 ```
-The old user-created VLANs should be gone, leaving the default VLAN configuration.
+The old user-created VLANs should be gone, leaving the default VLAN configuration. The expected result is highlighted in **green**.
+
+![Verifying erased config](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/Verif%20after%20reset.PNG)
 
 # 9. Enter Bootloader Again
 
@@ -202,6 +220,8 @@ packages.conf
 ```
 ...should remain.
 
+![Flash directories after resetting the configs](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/dir%20flash.PNG)
+
 # 10. Restore the Bootloader Variable
 
 Check the current variables:
@@ -211,6 +231,7 @@ set
 
 You should still see:
   ```SWITCH_IGNORE_STARTUP_CFG=1```
+![Still existing SIS_CFG=1](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/CFG1%20-%202.jpg)
 
 Now return it to the normal value:
 
@@ -237,12 +258,13 @@ or explicitly:
 boot flash:packages.conf
 ```
 
-# 12. Skip or accept the Initial Configuration Dialog
+![Final SIS_CFG=0](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/Final%20CFF0.jpg)
 
-After boot, the switch may ask:
-```Would you like to enter the initial configuration dialog? [yes/no]:```
+Skip or accept the Initial Configuration Dialog
 
-# 13. Quick Summary
+After boot, the switch may ask: ```Would you like to enter the initial configuration dialog? [yes/no]:```
+
+# 12. Quick Summary
 
 The complete process is:
 
