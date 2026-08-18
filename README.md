@@ -1,7 +1,7 @@
-# Cisco-Switch-Factory-Reset
-This guide shows how to reset a Cisco Catalyst 3650 48-port switch when you don't know the credentials required to log in. The switch must be physically accessible, as this process requires direct access to the console port and the physical **MODE** button.
+# Cisco Switch Factory Reset
+This guide shows how to reset a **Cisco Catalyst 3650** 48-port switch when you don't know the credentials required to log in. The switch must be physically accessible, as this process requires direct access to the console port and the physical **MODE** button.
 
-The key concept is:
+**The key concept is:**
 Temporarily ignore the existing startup configuration → boot into IOS → erase the startup configuration and VLAN database → restore the default boot behavior → boot normally.
 
 ## WARNING: This process deletes the switch configuration and VLAN database. Do not use it on a production switch unless the configuration was backed up or no longer required.
