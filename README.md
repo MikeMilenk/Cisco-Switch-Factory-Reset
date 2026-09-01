@@ -173,7 +173,7 @@ Now erase it:
 ```bash
 erase startup-config
 ```
-Confirm the deletion when prompted by clicking **Enter**.
+Confirm the deletion when prompted by pressing **Enter**.
 
 # 7. Delete the VLAN Database
 
@@ -216,7 +216,11 @@ To avoid entering the bootloader again, we can simply run the following command 
 ```bash
 no system ignore startupconfig switch all
 ```
+Press **Enter** to confirm the changes.
+
 From that point on, the switch will no longer ignore the startup configuration on subsequent boots. Any password or custom configuration we apply will be saved and loaded normally during the next startup.
+
+![Revert Variable back to 0](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/e326ee71226de62f63e1645a7f30364b60de833a/images/Revert%20variable.png)
 
 
 # 10. Quick Summary
