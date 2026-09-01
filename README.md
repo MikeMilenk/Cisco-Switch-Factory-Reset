@@ -16,10 +16,8 @@ Temporarily ignore the existing startup configuration → boot into IOS → eras
 - **[6. Delete the Startup Configuration](#6-delete-the-startup-configuration)**
 - **[7. Delete the VLAN Database](#7-delete-the-vlan-database)**
 - **[8. Verify the Reset](#8-verify-the-reset)**
-- **[9. Enter Bootloader Again](#9-enter-bootloader-again)**
-- **[10. Restore the Bootloader Variable](#10-restore-the-bootloader-variable)**
-- **[11. Boot Normally](#11-boot-normally)**
-- **[12. Quick Summary](#12-quick-summary)**
+- **[9. Restore the Bootloader Variable](#10-restore-the-bootloader-variable)**
+- **[10. Quick Summary](#12-quick-summary)**
 ---
 
 
@@ -211,76 +209,17 @@ The old user-created VLANs should be gone, leaving the default VLAN configuratio
 
 ![Verifying erased config](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/Verif%20after%20reset.PNG)
 
-# 9. Enter Bootloader Again
+# 9. Restore the Bootloader Variable
 
-- Power off the switch.
-- Hold the MODE button.
-- Power it on. Wait until `SYS` and `ACTV` are amber.
-- Release the **MODE** button.
-
-At the Bootloader prompt, initialize flash again:
+Once we have deleted the **Startup Configuration** and **VLAN Database**, we need to revert the `SWITCH_IGNORE_STARTUP_CFG` variable back to `0`.
+To avoid entering the bootloader again, we can simply run the following command from configuration mode `conf t`:
 ```bash
-flash_init
+no system ignore startupconfig switch all
 ```
+From that point on, the switch will no longer ignore the startup configuration on subsequent boots. Any password or custom configuration we apply will be saved and loaded normally during the next startup.
 
-Then:
-```bash
-dir flash:
-```
-`vlan.dat` and the old configuration files (such as `config.text` or `nvram_config`) should no longer be present.
 
-The IOS XE system files such as:
-```bash
-cat3k_...
-packages.conf
-```
-...should remain.
-
-![Flash directories after resetting the configs](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/dir%20flash.PNG)
-
-# 10. Restore the Bootloader Variable
-
-Check the current variables:
-```bash
-set
-```
-
-You should still see:
-  ```SWITCH_IGNORE_STARTUP_CFG=1```
-![Still existing SIS_CFG=1](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/CFG1%20-%202.jpg)
-
-Now return it to the normal value:
-
-```bash
-SWITCH_IGNORE_STARTUP_CFG=0
-```
-
-Verify:
-```bash
-set
-```
-
-It should now show:
-  ```SWITCH_IGNORE_STARTUP_CFG=0```
-
-# 11. Boot Normally
-
-If the boot variable is: ```BOOT=flash:packages.conf``` you can simply run:
-```bash
-boot
-```
-or explicitly:
-```bash
-boot flash:packages.conf
-```
-
-![Final SIS_CFG=0](https://github.com/MikeMilenk/Cisco-Switch-Factory-Reset/blob/9bbe5b2075bf9a5a5fe1afdcf07fedb06acd30ae/images/Final%20CFF0.jpg)
-
-Skip or accept the Initial Configuration Dialog
-
-After boot, the switch may ask: ```Would you like to enter the initial configuration dialog? [yes/no]:```
-
-# 12. Quick Summary
+# 10. Quick Summary
 
 The complete process is:
 
@@ -289,7 +228,7 @@ The complete process is:
 - `dir flash:`
 - `set`
 - `SWITCH_IGNORE_STARTUP_CFG=1`
-- `boot`
+- `boot flash:packages.conf`
 
 **IOS**
 - `enable`
@@ -302,9 +241,5 @@ The complete process is:
 - `show startup-config`
 - `show vlan brief`
 
-**Bootloader again**
-- `flash_init`
-- `dir flash:`
-- `set`
-- `SWITCH_IGNORE_STARTUP_CFG=0`
-- `boot`
+**Restore the Bootloader Variable**
+- `no system ignore startupconfig switch all`
