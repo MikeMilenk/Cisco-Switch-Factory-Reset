@@ -16,8 +16,8 @@ Temporarily ignore the existing startup configuration → boot into IOS → eras
 - **[6. Delete the Startup Configuration](#6-delete-the-startup-configuration)**
 - **[7. Delete the VLAN Database](#7-delete-the-vlan-database)**
 - **[8. Verify the Reset](#8-verify-the-reset)**
-- **[9. Restore the Bootloader Variable](#10-restore-the-bootloader-variable)**
-- **[10. Quick Summary](#12-quick-summary)**
+- **[9. Restore the Bootloader Variable](#9-restore-the-bootloader-variable)**
+- **[10. Quick Summary](#10-quick-summary)**
 ---
 
 
